@@ -17,6 +17,9 @@ alias ..="cd .."
 # path
 export PATH=${PATH}:${HOME}/.local/bin # local bin
 
+# vimrc
+export VIMRC=${HOME}/.config/nvim/init.vim
+
 # prompt
 RED="\e[1;91m"
 BLUE="\e[1;36m"
@@ -26,3 +29,4 @@ NC="\e[0m"
 
 PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
 PS2="╶─ ${RED}\$${NC} "
+. "$HOME/.cargo/env"

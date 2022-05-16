@@ -8,7 +8,6 @@
 -- 
 
 import qualified Codec.Binary.UTF8.String as UTF8
-
                    
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -25,6 +24,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 
+import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 
 import XMonad.Util.Run
@@ -32,38 +32,15 @@ import XMonad.Util.SpawnOnce
 
 import qualified XMonad.StackSet as W
 
-currentIcon :: String -> String
-currentIcon _ = "\xf111"
-
-hiddenIcon :: String -> String
-hiddenIcon _ = "\xf192"
-
-hiddenNoWindowsIcon :: String -> String
-hiddenNoWindowsIcon _ = "\xf10c"
-
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
-
-myBorderWidth :: Dimension
-myBorderWidth = 3
-
-shift :: KeyMask
-shift = shiftMask
-
+shift   :: KeyMask
 control :: KeyMask
+super   :: KeyMask
+alt     :: KeyMask
+
+shift   = shiftMask
 control = controlMask
-
-super :: KeyMask
-super = mod4Mask
-
-alt :: KeyMask
-alt = mod1Mask
-
-myNormalBorderColor :: String
-myNormalBorderColor = "#ff0000"
-
-myFocusedBorderColor :: String
-myFocusedBorderColor = "#1111ff"
+super   = mod4Mask
+alt     = mod1Mask
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- move focus
@@ -105,54 +82,32 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ]
     ++
 
-    --
-    -- mod-[1..9], Switch to workspace N
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_s, xK_d, xK_f, xK_x, xK_c, xK_v]
+    -- workspaces
+    [((m .|. super, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_s, xK_d, xK_f, xK_g, xK_x, xK_c, xK_v, xK_b]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shift)]]
-    ++
-
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    -- mod-button1, Set the window to floating mode and move by dragging
     [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
                                        >> windows W.shiftMaster))
-
-    -- mod-button2, Raise the window to the top of the stack
     , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-
-    -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
                                        >> windows W.shiftMaster))
-
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
 
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
+myLayout = (tiled ||| full)
   where
-    -- default tiling algorithm partitions the screen into two panes
-    tiled   = Tall nmaster delta ratio
+    tiled = renamed [Replace tiledIcon]
+            $ avoidStruts
+            $ spacingWithEdge spacing
+            $ Tall 1 (5 / 100) (1 / 2)
+    full  = renamed [Replace fullIcon]
+            $ avoidStruts
+            $ Full
 
-    -- The default number of windows in the master pane
-    nmaster = 1
-
-    -- Default proportion of screen occupied by master pane
-    ratio   = 1/2
-
-    -- Percent of screen to increment by when resizing panes
-    delta   = 3/100
+    tiledIcon = "\xfa6f"
+    fullIcon  = "\xfc62"
+    spacing   = 7
 
 myManageHook = composeAll
     [ appName =? "pcmanfm" --> doCenterFloat
@@ -161,13 +116,13 @@ myManageHook = composeAll
 dbusOutput :: D.Client -> String -> IO ()
 dbusOutput dbus str = do
     let signal = (D.signal objectPath interfaceName memberName) {
-            D.signalBody = [D.toVariant $ UTF8.decodeString str]
-        }
+        D.signalBody = [D.toVariant $ UTF8.decodeString str]
+    }
     D.emit dbus signal
   where
-    objectPath = D.objectPath_ "/org/xmonad/Log"
+    objectPath    = D.objectPath_    "/org/xmonad/Log"
     interfaceName = D.interfaceName_ "org.xmonad.Log"
-    memberName = D.memberName_ "Update"
+    memberName    = D.memberName_    "Update"
 
 myLogHook :: D.Client -> PP
 myLogHook dbus = def
@@ -176,7 +131,13 @@ myLogHook dbus = def
     , ppCurrent         = wrap "" " " . currentIcon
     , ppHidden          = wrap "" " " . hiddenIcon
     , ppHiddenNoWindows = wrap "" " " . hiddenNoWindowsIcon
+    , ppLayout          = wrap "Layout: " ""
+    , ppSep             = " "
     }
+  where
+    currentIcon         _ = "\xf111"
+    hiddenIcon          _ = "\xf192"
+    hiddenNoWindowsIcon _ = "\xf10c"
 
 myStartupHook :: X ()
 myStartupHook = do
@@ -194,17 +155,17 @@ main = do
 
     xmonad $ docks $ defaultConfig
         { terminal           = "kitty"
-        , focusFollowsMouse  = myFocusFollowsMouse
-        , borderWidth        = myBorderWidth
+        , focusFollowsMouse  = True
+        , borderWidth        = 0
         , modMask            = super
-        , workspaces         = ["1","2","3","4","5","6"]
-        , normalBorderColor  = myNormalBorderColor
-        , focusedBorderColor = myFocusedBorderColor
+        , workspaces         = ["1", "2", "3", "4", "5", "6", "7", "8"]
+        , normalBorderColor  = ""
+        , focusedBorderColor = ""
 
         , keys               = myKeys
         , mouseBindings      = myMouseBindings
 
-        , layoutHook         = spacingWithEdge 7 $ myLayout
+        , layoutHook         = myLayout
         , manageHook         = myManageHook
         , handleEventHook    = mempty
         , logHook            = dynamicLogWithPP (myLogHook dbus)
