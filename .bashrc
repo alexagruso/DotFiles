@@ -11,6 +11,9 @@ alias neofetch="echo;echo;neofetch"
 alias nv="nvim"
 alias la="exa -la"
 
+alias cb="cargo build"
+alias cr="cargo run"
+
 alias ~="cd ${HOME}"
 alias ..="cd .."
 
