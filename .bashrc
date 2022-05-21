@@ -6,10 +6,10 @@ fi
 ## run commands
 
 # aliases
-alias dots="git --git-dir=${HOME}/dotfiles --work-tree=${HOME}"
 alias neofetch="echo;echo;neofetch"
 alias nv="nvim"
 alias la="exa -la"
+alias src="source ${HOME}/.bashrc"
 
 alias cb="cargo build"
 alias cr="cargo run"
@@ -17,10 +17,16 @@ alias cr="cargo run"
 alias ~="cd ${HOME}"
 alias ..="cd .."
 
+# git
+alias dots="git --git-dir=${HOME}/dotfiles --work-tree=${HOME}"
+alias gst="git status"
+alias ga="git add"
+alias gc="git commit -m "
+alias gp="git push"
+
 # path
 export PATH=${PATH}:${HOME}/.local/bin # local bin
-
-# vimrc
+export EDITOR=/usr/bin/nvim
 export VIMRC=${HOME}/.config/nvim/init.vim
 
 # prompt

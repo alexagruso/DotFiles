@@ -12,6 +12,7 @@ call plug#begin()
     Plug 'junegunn/fzf.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
+    Plug 'Yggdroot/indentLine'
 call plug#end()
 
 " editor
@@ -46,6 +47,11 @@ let g:neoterm_size = 60
 let g:neoterm_autoinsert = 1
 nnoremap <silent><leader>q  :Ttoggle<cr>
 tnoremap <silent><leader>q  <c-\><c-n>:Ttoggle<cr>
+tnoremap <silent><esc> <c-\><c-n>
+
+" auto-pairs
+let g:AutoPairsFlyMode = 0
+let g:AutoPairsShortcutBackInsert = '<c-b>'
 
 " fzf
 nnoremap <silent><leader><space> :GFiles<cr>
@@ -61,19 +67,19 @@ nnoremap <silent><leader>gs :G<cr>
 set termguicolors
 let g:tokyonight_style = "night"
 colorscheme tokyonight
- 
+
 " lightline
 set noshowmode
 let g:lightline = {
-    \ 'colorscheme': 'wombat',
-    \ 'active': {
-    \   'left': [ ['mode', 'paste'],
-    \             ['gitbranch', 'readonly', 'filename', 'modified'] ]
-    \ },
-    \ 'component_function': {
-    \   'gitbranch': 'gitbranch#name'
-    \ },
-    \ }
+            \ 'colorscheme': 'wombat',
+            \ 'active': {
+                \   'left': [ ['mode', 'paste'],
+                \             ['gitbranch', 'readonly', 'filename', 'modified'] ]
+                \ },
+                \ 'component_function': {
+                    \   'gitbranch': 'gitbranch#name'
+                    \ },
+                    \ }
 
 " enable treesitter
 lua << EOF
@@ -83,6 +89,6 @@ require('nvim-treesitter.configs').setup {
 
     highlight = {
         enable = true,
-    },
-}
+        },
+    }
 EOF
