@@ -24,7 +24,7 @@ alias ga="git add"
 alias gc="git commit -m "
 alias gp="git push"
 
-# path
+# set
 export PATH=${PATH}:${HOME}/.local/bin # local bin
 export EDITOR=/usr/bin/nvim
 export VIMRC=${HOME}/.config/nvim/init.vim
