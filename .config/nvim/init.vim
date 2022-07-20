@@ -37,6 +37,10 @@ set updatetime=750
 
 let g:mapleader = "\<space>"
 
+" buffers
+nnoremap <silent><c-h> :prev<cr>
+nnoremap <silent><c-l> :next<cr>
+ 
 " vim-maximizer
 nnoremap <silent><leader>w :MaximizerToggle<cr>
 vnoremap <silent><leader>w :MaximizerToggle<cr>gv
@@ -92,3 +96,13 @@ require('nvim-treesitter.configs').setup {
         },
     }
 EOF
+
+" coc
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+nnoremap <leader>rn <Plug>(coc-rename)

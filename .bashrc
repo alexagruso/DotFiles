@@ -11,8 +11,10 @@ alias nv="nvim"
 alias la="exa -la"
 alias src="source ${HOME}/.bashrc"
 
-alias cb="cargo build"
-alias cr="cargo run"
+alias cbuild="cargo build"
+alias cdoc="cargo doc"
+alias crun="cargo run"
+alias ctest="cargo test"
 
 alias ~="cd ${HOME}"
 alias ..="cd .."
@@ -24,10 +26,11 @@ alias ga="git add"
 alias gc="git commit -m "
 alias gp="git push"
 
-# set
-export PATH=${PATH}:${HOME}/.local/bin # local bin
+# vars
+export PATH=${PATH}:${HOME}/.local/bin
 export EDITOR=/usr/bin/nvim
 export VIMRC=${HOME}/.config/nvim/init.vim
+export BROWSER=/usr/bin/brave-bin
 
 # prompt
 RED="\e[1;91m"

@@ -55,6 +55,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- open applications
     , ((super .|. alt,             xK_Return), spawn $ XMonad.terminal conf)
+    , ((super .|. alt,             xK_o     ), spawn "wine ~/.wine/drive_c/Program\\ Files/OpenMPT/bin/x86/OpenMPT.exe")
     , ((super .|. alt,             xK_p     ), spawn "pulsemixer")
     , ((super .|. alt,             xK_b     ), spawn "brave-bin")
     , ((super .|. alt,             xK_n     ), spawn "pcmanfm")
