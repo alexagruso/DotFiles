@@ -20,7 +20,7 @@ alias ~="cd ${HOME}"
 alias ..="cd .."
 
 # git
-alias dots="git --git-dir=${HOME}/dotfiles --work-tree=${HOME}"
+alias dots="git --git-dir=${HOME}/.dotfiles --work-tree=${HOME}"
 alias gst="git status"
 alias ga="git add"
 alias gc="git commit -m "
@@ -41,4 +41,3 @@ NC="\e[0m"
 
 PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
 PS2="╶─ ${RED}\$${NC} "
-. "$HOME/.cargo/env"
