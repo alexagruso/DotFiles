@@ -16,6 +16,8 @@ alias cdoc="cargo doc"
 alias crun="cargo run"
 alias ctest="cargo test"
 
+alias code="code -r . && exit"
+
 alias ~="cd ${HOME}"
 alias ..="cd .."
 
@@ -41,3 +43,4 @@ NC="\e[0m"
 
 PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
 PS2="╶─ ${RED}\$${NC} "
+
