@@ -16,7 +16,7 @@ alias cdoc="cargo doc"
 alias crun="cargo run"
 alias ctest="cargo test"
 
-alias code="code -r . && exit"
+alias code="code -r . ;exit"
 
 alias ~="cd ${HOME}"
 alias ..="cd .."
@@ -28,7 +28,13 @@ alias ga="git add"
 alias gc="git commit -m "
 alias gp="git push"
 
-# vars
+# node
+alias npm="pnpm"
+alias npma="pnpm add"
+alias npmd="pnpm add --save-dev"
+alias npmi="pnpm install"
+
+## vars
 export PATH=${PATH}:${HOME}/.local/bin
 export EDITOR=/usr/bin/nvim
 export VIMRC=${HOME}/.config/nvim/init.vim
@@ -44,3 +50,8 @@ NC="\e[0m"
 PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
 PS2="╶─ ${RED}\$${NC} "
 
+
+# pnpm
+export PNPM_HOME="/home/alexander/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
