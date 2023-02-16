@@ -1,174 +1,120 @@
---
---        _                                              
---   __ _| | _____  __   __ _  __ _ _ __ _   _ ___  ___  
---  / _` | |/ _ \ \/ /  / _` |/ _` | '__| | | / __|/ _ \ 
--- | (_| | |  __/>  <  | (_| | (_| | |  | |_| \__ \ (_) |
---  \__,_|_|\___/_/\_\  \__,_|\__, |_|   \__,_|___/\___/ 
---                            |___/ 
--- 
-
-import qualified Codec.Binary.UTF8.String as UTF8
-                   
-import qualified DBus as D
-import qualified DBus.Client as D
-
+import XMonad
 import Data.Monoid
-import qualified Data.Map as M
-
 import System.Exit
 
-import XMonad
-
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.SetWMName
-
-import XMonad.Layout.Renamed
+import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+
 import qualified XMonad.StackSet as W
+import qualified Data.Map        as M
 
-shift   :: KeyMask
-control :: KeyMask
-super   :: KeyMask
-alt     :: KeyMask
+-- give mod#mask variables clearer names
+altMask = mod1Mask
+superMask = mod4Mask
 
-shift   = shiftMask
-control = controlMask
-super   = mod4Mask
-alt     = mod1Mask
+-- space around each window, gap between windows is double this amount
+windowGap = 6
 
+-- keys are organized by function, e.g. moving windows, layout, applications, etc.
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-    -- move focus
-    [ ((super,                     xK_j     ), windows W.focusDown)
-    , ((super,                     xK_k     ), windows W.focusUp)
-    , ((super,                     xK_Return), windows W.focusMaster)
-
-    -- move windows
-    , ((super .|. shift,           xK_Return), windows W.swapMaster)
-    , ((super .|. shift,           xK_j     ), windows W.swapDown  )
-    , ((super .|. shift,           xK_k     ), windows W.swapUp    )
-
-    -- open applications
-    , ((super .|. alt,             xK_Return), spawn $ XMonad.terminal conf)
-    , ((super .|. alt,             xK_o     ), spawn "wine ~/.wine/drive_c/Program\\ Files/OpenMPT/bin/x86/OpenMPT.exe")
-    , ((super .|. alt,             xK_p     ), spawn "pulsemixer")
-    , ((super .|. alt,             xK_b     ), spawn "brave-bin")
-    , ((super .|. alt,             xK_n     ), spawn "pcmanfm")
-    , ((super .|. alt,             xK_m     ), spawn "musescore")
-    , ((super .|. alt,             xK_space ), kill)
-
-    -- wm actions
-    , ((control .|. super,         xK_space ), setLayout $ XMonad.layoutHook conf)
-    , ((control .|. super,         xK_space ), sendMessage NextLayout)
-    , ((control .|. super,         xK_h     ), sendMessage Shrink)
-    , ((control .|. super,         xK_l     ), sendMessage Expand)
-    , ((control .|. super,         xK_f     ), withFocused $ windows . W.sink)
-    , ((control .|. super,         xK_comma ), sendMessage (IncMasterN (-1)))
-    , ((control .|. super,         xK_period), sendMessage (IncMasterN 1))
-    , ((control .|. super,         xK_b     ), sendMessage ToggleStruts)
-    , ((control .|. super,         xK_j     ), spawn "pulsemixer --change-volume -5")
-    , ((control .|. super,         xK_k     ), spawn "pulsemixer --change-volume +5")
-    , ((control .|. super,         xK_m     ), spawn "pulsemixer --toggle-mute")
-
-    -- system actions
-    , ((control .|. super .|. alt, xK_p     ), io (exitWith ExitSuccess))
-    , ((control .|. super .|. alt, xK_n     ), spawn "sudo reboot")
-    , ((control .|. super .|. alt, xK_m     ), spawn "sudo halt")
-    , ((control .|. super .|. alt, xK_Return), spawn "pkill polybar ; xmonad --recompile ; xmonad --restart")
+    -- super: change window focus
+    [ ((modm, xK_j), windows W.focusDown)
+    , ((modm, xK_k), windows W.focusUp)
+    , ((modm, xK_m), windows W.focusMaster)
     ]
     ++
+    -- super + alt: open applications or close windows
+    [ ((modm .|. altMask, xK_Return), spawn $ XMonad.terminal conf)
+    , ((modm .|. altMask, xK_space),  kill)
+    , ((modm .|. altMask, xK_b),      spawn $ "brave-bin")
+    , ((modm .|. altMask, xK_v),      spawn $ "vscode")
+    , ((modm .|. altMask, xK_o),      spawn $ "openmpt")
+    , ((modm .|. altMask, xK_t),      spawn $ "qbittorrent")
+    , ((modm .|. altMask, xK_g),      spawn $ "godot")
+    , ((modm .|. altMask, xK_f),      spawn $ "zoom")
+    , ((modm .|. altMask, xK_m),      spawn $ "Musescore")
+    , ((modm .|. altMask, xK_s),      spawn $ "scrot -s -z")
+    ]
+    ++
+    -- super + control: change layouts 
+    [ ((modm .|. controlMask, xK_space ),  sendMessage NextLayout)
+    , ((modm .|. controlMask, xK_Return ), setLayout $ XMonad.layoutHook conf)
+    , ((modm .|. controlMask, xK_c),       withFocused $ windows . W.sink)
+    , ((modm .|. controlMask, xK_comma ),  sendMessage (IncMasterN 1))
+    , ((modm .|. controlMask, xK_period),  sendMessage (IncMasterN (-1)))
+    , ((modm .|. controlMask, xK_h),       sendMessage Shrink)
+    , ((modm .|. controlMask, xK_l),       sendMessage Expand)
+    , ((modm .|. controlMask, xK_j),       sendMessage ToggleStruts)
+    ]
+    ++
+    -- super + shift:  moving windows
+    [ ((modm .|. shiftMask, xK_Return), windows W.swapMaster)
+    , ((modm .|. shiftMask, xK_j),      windows W.swapDown  )
+    , ((modm .|. shiftMask, xK_k),      windows W.swapUp    )
+    ]
+    ++
+    -- super + alt + shift: system actions
+    [ ((modm .|. controlMask .|. altMask, xK_n),      spawn $ "sudo reboot")
+    , ((modm .|. controlMask .|. altMask, xK_m),      spawn $ "sudo halt")
+    , ((modm .|. controlMask .|. altMask, xK_space),  io (exitWith ExitSuccess))
+    , ((modm .|. controlMask .|. altMask, xK_Return),
+        spawn $ "xmonad --recompile ; xmonad --restart")
+    ]
+    ++
+    -- workspace bindings
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_s, xK_d, xK_f, xK_g, xK_v]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 
-    -- workspaces
-    [((m .|. super, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_s, xK_d, xK_f, xK_g, xK_x, xK_c, xK_v, xK_b]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shift)]]
 
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
                                        >> windows W.shiftMaster))
+
     , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+
     , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
                                        >> windows W.shiftMaster))
     ]
 
-myLayout = (tiled ||| full)
-  where
-    tiled = renamed [Replace tiledIcon]
-            $ avoidStruts
-            $ spacingWithEdge spacing
-            $ Tall 1 (5 / 100) (1 / 2)
-    full  = renamed [Replace fullIcon]
-            $ avoidStruts
-            $ Full
-
-    tiledIcon = "\xfa6f"
-    fullIcon  = "\xfc62"
-    spacing   = 7
-
 myManageHook = composeAll
-    [ appName =? "pcmanfm" --> doCenterFloat
+    [ (isFullscreen --> doFullFloat)
     ]
 
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-    let signal = (D.signal objectPath interfaceName memberName) {
-        D.signalBody = [D.toVariant $ UTF8.decodeString str]
-    }
-    D.emit dbus signal
+myLayout = avoidStruts $ (master ||| full)
   where
-    objectPath    = D.objectPath_    "/org/xmonad/Log"
-    interfaceName = D.interfaceName_ "org.xmonad.Log"
-    memberName    = D.memberName_    "Update"
+    -- default layout with master window
+    master = spacingWithEdge windowGap $ Tall 1 (5/100) (1/2)
+    -- fullscreen, no borders and cover panel
+    full   = noBorders $ Full
 
-myLogHook :: D.Client -> PP
-myLogHook dbus = def
-    { ppOutput          = dbusOutput dbus
-    , ppOrder           = \(workspace:layout:_) -> [workspace, layout]
-    , ppCurrent         = wrap "" " " . currentIcon
-    , ppHidden          = wrap "" " " . hiddenIcon
-    , ppHiddenNoWindows = wrap "" " " . hiddenNoWindowsIcon
-    , ppLayout          = wrap "Layout: " ""
-    , ppSep             = " "
-    }
-  where
-    currentIcon         _ = "\xf111"
-    hiddenIcon          _ = "\xf192"
-    hiddenNoWindowsIcon _ = "\xf10c"
-
-myStartupHook :: X ()
 myStartupHook = do
-    setWMName "XMonad"
-    spawn     "nitrogen --restore"
-    spawn     "picom --experimental-backends"
-    spawn     "polybar"
+    spawnOnce $ "nitrogen --restore" -- wallpaper
+    spawn     $ "picom"              -- compositor
+    spawn     $ "polybar -r"         -- panel
 
-main :: IO ()
 main = do
-    dbus <- D.connectSession
-
-    D.requestName dbus (D.busName_ "org.xmonad.Log")
-        [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-
-    xmonad $ docks $ defaultConfig
-        { terminal           = "kitty"
+    xmonad $ docks $ ewmh $ def
+        { terminal           = "alacritty"
         , focusFollowsMouse  = True
-        , borderWidth        = 0
-        , modMask            = super
-        , workspaces         = ["1", "2", "3", "4", "5", "6", "7", "8"]
-        , normalBorderColor  = ""
-        , focusedBorderColor = ""
+        , borderWidth        = 2
+        , modMask            = superMask
+        , workspaces         = ["1", "2", "3", "4", "5"]
+        , normalBorderColor  = "#004040"
+        , focusedBorderColor = "#f00040"
+        , manageHook         = myManageHook
 
         , keys               = myKeys
         , mouseBindings      = myMouseBindings
 
         , layoutHook         = myLayout
-        , manageHook         = myManageHook
-        , handleEventHook    = mempty
-        , logHook            = dynamicLogWithPP (myLogHook dbus)
         , startupHook        = myStartupHook
-        } 
+        }
