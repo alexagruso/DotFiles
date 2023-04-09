@@ -8,8 +8,12 @@ alias ls="exa"
 alias la="exa -la"
 alias nv="nvim"
 alias pg="ping gnu.org -c 3"
+alias src="source ~/.bashrc"
 alias ~="cd ~"
 alias ..="cd .."
+
+# system
+alias sysup="sudo emerge --update --newuse --deep @world"
 
 # git
 alias g="git"
@@ -30,6 +34,9 @@ alias npi="pnpm install"
 alias npd="pnpm install -D"
 alias npr="pnpm run"
 
+# misc
+alias s="sudo"
+
 # path
 export PATH=${PATH}:~/.local/bin/
 
@@ -43,3 +50,4 @@ NC="\e[0m"
 # ps prompt
 PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
 PS2="╶─ ${RED}\$${NC} "
+. "$HOME/.cargo/env"
