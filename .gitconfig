@@ -1,3 +1,5 @@
 [user]
 	email = agrusoalexander@gmail.com
 	name = AlexAgruso
+[core]
+	editor = /usr/bin/nvim
