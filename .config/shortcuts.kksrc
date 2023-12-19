@@ -1,0 +1,8 @@
+[alacritty.desktop][Global Shortcuts]
+_launch=Meta+Alt+Return
+
+[brave.desktop][Global Shortcuts]
+_launch=Meta+Alt+B
+
+[code-2.desktop][Global Shortcuts]
+_launch=Meta+Alt+V
