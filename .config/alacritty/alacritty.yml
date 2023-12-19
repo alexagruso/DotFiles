@@ -14,10 +14,10 @@ window:
   decorations: full
 
   # Window title
-  title: Alacritty
+  title: Alacritty@CachyOS
 
   # Opacity
-  opacity: 1
+  opacity: 0.95
 
   # Window class (Linux/BSD only):
   class:
@@ -42,61 +42,32 @@ scrolling:
 
 # Colors (Oceanic Next)
 colors:
- # Default colors
- primary:
-   background: '#1b1b25'
-   foreground: '#d8dee9'
+  # Default colors
+  primary:
+    background: '#1b2b34'
+    foreground: '#d8dee9'
 
- # Normal colors
- normal:
-   black:   '#343d46'
-   red:     '#EC5f67'
-   green:   '#99C794'
-   yellow:  '#FAC863'
-   blue:    '#6699cc'
-   magenta: '#c594c5'
-   cyan:    '#5fb3b3'
-   white:   '#d8dee9'
+  # Normal colors
+  normal:
+    black:   '#343d46'
+    red:     '#EC5f67'
+    green:   '#99C794'
+    yellow:  '#FAC863'
+    blue:    '#6699cc'
+    magenta: '#c594c5'
+    cyan:    '#5fb3b3'
+    white:   '#d8dee9'
 
- # Bright colors
- bright:
-   black:   '#343d46'
-   red:     '#EC5f67'
-   green:   '#99C794'
-   yellow:  '#FAC863'
-   blue:    '#6699cc'
-   magenta: '#c594c5'
-   cyan:    '#5fb3b3'
-   white:   '#d8dee9'
-
-# # Colors (Nord)
-# colors:
-#   # Default colors
-#   primary:
-#     background: '0x2E3440'
-#     foreground: '0xD8DEE9'
-#
-#   # Normal colors
-#   normal:
-#     black:   '0x3B4252'
-#     red:     '0xBF616A'
-#     green:   '0xA3BE8C'
-#     yellow:  '0xEBCB8B'
-#     blue:    '0x81A1C1'
-#     magenta: '0xB48EAD'
-#     cyan:    '0x88C0D0'
-#     white:   '0xE5E9F0'
-#
-#   # Bright colors
-#   bright:
-#     black:   '0x4C566A'
-#     red:     '0xBF616A'
-#     green:   '0xA3BE8C'
-#     yellow:  '0xEBCB8B'
-#     blue:    '0x81A1C1'
-#     magenta: '0xB48EAD'
-#     cyan:    '0x8FBCBB'
-#     white:   '0xECEFF4'
+  # Bright colors
+  bright:
+    black:   '#343d46'
+    red:     '#EC5f67'
+    green:   '#99C794'
+    yellow:  '#FAC863'
+    blue:    '#6699cc'
+    magenta: '#c594c5'
+    cyan:    '#5fb3b3'
+    white:   '#d8dee9'
 
 # Font configuration
 font:
@@ -108,22 +79,22 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: monospace
+    family: "FiraCode Nerd Font Mono"
     style: Regular
 
   # Bold font face
   bold:
-    family: monospace
+    family: "FiraCode Nerd Font Mono"
     style: Bold
 
   # Italic font face
   italic:
-    family: monospace
+    family: "FiraCode Nerd Font Mono"
     style: Italic
 
   # Bold italic font face
   bold_italic:
-    family: monospace
+    family: "FiraCode Nerd Font Mono"
     style: Bold Italic
 
   # Point size
