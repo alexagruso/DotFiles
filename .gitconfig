@@ -3,3 +3,5 @@
 	name = AlexAgruso
 [core]
 	editor = /usr/bin/nvim
+[init]
+	defaultBranch = main
