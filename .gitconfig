@@ -1,7 +1,17 @@
+[alias]
+	a = add
+	cm = commit
+	fc = fetch
+	pl = pull
+	ps = push
+	st = status
+
+[core]
+	editor = /usr/bin/nvim
+
+[init]
+	defaultBranch = main
+
 [user]
 	email = agrusoalexander@gmail.com
 	name = AlexAgruso
-[core]
-	editor = /usr/bin/nvim
-[init]
-	defaultBranch = main
