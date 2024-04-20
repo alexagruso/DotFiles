@@ -1,7 +1,10 @@
 [alias]
 	a = add
+	cf = config
+	ch = checkout
 	cm = commit
 	fc = fetch
+	l = log
 	pl = pull
 	ps = push
 	st = status
