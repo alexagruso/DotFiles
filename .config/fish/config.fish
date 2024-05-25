@@ -5,6 +5,9 @@ alias dots="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 # fuzzy finder
 fzf --fish | source
 
+# cargo
+alias c="cargo"
+
 # git
 alias g="git"
 

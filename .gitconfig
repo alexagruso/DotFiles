@@ -3,11 +3,13 @@
 	cf = config
 	ch = checkout
 	cm = commit
+	df = diff
 	fc = fetch
 	l = log
 	pl = pull
 	ps = push
 	st = status
+	sts = status -s
 
 [core]
 	editor = /usr/bin/nvim
