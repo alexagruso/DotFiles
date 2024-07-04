@@ -39,15 +39,3 @@ alias s="sudo"
 
 # path
 export PATH=${PATH}:~/.local/bin/
-
-# prompt colors
-RED="\e[1;91m"
-BLUE="\e[1;36m"
-GREEN="\e[1;32m"
-YELLOW="\e[1;33m"
-NC="\e[0m"
-
-# ps prompt
-PS1="┌─ ${BLUE}\u${NC} ── ${BLUE}\@${NC} ── ${BLUE}\W${NC} ──\n└─ ${RED}\$${NC} "
-PS2="╶─ ${RED}\$${NC} "
-. "$HOME/.cargo/env"

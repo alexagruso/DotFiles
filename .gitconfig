@@ -20,3 +20,5 @@
 [user]
 	email = agrusoalexander@gmail.com
 	name = AlexAgruso
+[status]
+	showUntrackedFiles = no
